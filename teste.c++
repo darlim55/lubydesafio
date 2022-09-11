@@ -8,99 +8,19 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-#include <string.h>
+#include <string>
 #include <algorithm>
+#include "classes.h"
 using namespace std;
 
-/*
- * Temos a class itens a seguir que servira para armazenas os dados que seram lidos do arquivo txr
- */
-class Itens
-{
+/*===========================
 
-  int Numero_identificador;
-  string Nome;
-  int Tipo;
-  float Custo;
-  int Unidade;
+** Funcoes usadas em termos gerais
 
-public:
-  void set_Numero_identificador(int num) { Numero_identificador = num; }
-  int get_Numero_identificador() { return
+*============================ */
 
-                                   Numero_identificador; }
-  void set_Nome(string nome) { Nome = nome; }
-  string get_Nome() { return Nome; }
-
-  void set_Tipo(int tipo) { Tipo = tipo; }
-  int get_Tipo() { return Tipo; }
-
-  void set_Custo(float custo) { Custo = custo; }
-  int get_Custo() { return Custo; }
-
-  void set_unidade(int unidade) { Unidade = unidade; }
-  int get_unidade() { return Unidade; }
-};
-
-/*
- *  as classe abaixo representam os tres tipo de itens que a loja diponiliza
- *  Elas herdam os atributos da classe pai (itens) e cada um tem um atributo especifico
- */
-class Armamentos : public Itens // Define um caminhao.
-{
-  int Dano;
-
-public:
-  void set_dano(int dano) { Dano = dano; }
-  int get_dano() { return Dano; }
-  void calcular_dano();
-};
-
-class Armaduras : public Itens // Define um caminhao.
-{
-  double Durabilidade;
-
-public:
-  void set_Durabilidade(int durabilidade) { Durabilidade = durabilidade; }
-  double get_Durabilidade()
-  {
-    return Durabilidade;
-  }
-  void calcular_Durabilidade();
-};
-
-class Consumiveis : public Itens
-{
-  double Usos;
-
-public:
-  void set_carga(int usos) { Usos = usos; }
-  double get_carga() { return Usos; }
-  void calcular_Usos();
-};
-
-/*
- *  EStruturas que seram utelizadas para controle dos itens
- */
-struct Armanentos_Jogo
-{
-  Armamentos *itens = new Armamentos[100];
-  int num = 0;
-};
-
-struct Armadura_Jogo
-{
-  Armaduras *itens = new Armaduras[100];
-  int num = 0;
-};
-
-struct Consumiveis_Jogo
-{
-  Consumiveis *itens = new Consumiveis[100];
-  int num = 0;
-};
-
-string replace(string nome)
+/*Funcao para ajeitar a string que vem dos arquivos*/
+string Replace(string nome)
 {
   for (int i = 0; i < nome.length(); i++)
   {
@@ -111,24 +31,26 @@ string replace(string nome)
   return nome;
 }
 
-string replace_inv(string nome)
+/*Funcao para ajeitar a string que vai ser gravada nos arquivos txt*/
+string Replace_inv(string nome)
 {
   for (int i = 0; i < nome.length(); i++)
   {
-    if (nome[i] == ' ')
-      nome[i] = '_';
+    if (nome[i] == '_')
+      nome[i] = ' ';
   }
 
   return nome;
 }
 
-bool valida_identificador(int numero_identificador)
+/*Funcao que valida o id do item para nao ser cadastrado itens de mesmo id*/
+bool Valida_identificador(int numero_identificador)
 {
   fstream fout;
   int id, d, custo, unidade, valor;
   string linha;
   string nome;
-  fout.open("teste.txt", ios::in); // abre para escrita (ios::out)
+  fout.open("estoque.txt", ios::in); // abre para escrita (ios::out)
 
   while (fout >> id >> d >> custo >> unidade >> linha >> valor)
   {
@@ -144,17 +66,18 @@ bool valida_identificador(int numero_identificador)
   return false;
 }
 
-bool valida_nome(string nome)
+/*Funcao que valida o nome do item para nao ser cadastrado itens de mesmo nome*/
+bool Valida_nome(string nome)
 {
   fstream fout;
   int id, d, custo, unidade, valor;
   string linha, aux, aux2;
   aux2 = nome;
-  fout.open("teste.txt", ios::in); // abre para escrita (ios::out)
+  fout.open("estoque.txt", ios::in); // abre para escrita (ios::out)
 
   while (fout >> id >> d >> custo >> unidade >> linha >> valor)
   {
-    string aux = replace(linha);
+    string aux = Replace(linha);
 
     transform(aux2.begin(), aux2.end(), aux2.begin(),
               [](unsigned char c)
@@ -176,13 +99,14 @@ bool valida_nome(string nome)
   return false;
 }
 
+/*Funcao que verifica o tipo de item pois esta cadastrado no arquivo os itens com um valor numerico */
 int valida_tipo(string tipo)
 {
 
   fstream fout;
   string aux2;
   aux2 = tipo;
-  fout.open("teste.txt", ios::in); // abre para escrita (ios::out)
+  fout.open("estoque.txt", ios::in); // abre para escrita (ios::out)
 
   std::for_each(tipo.begin(), tipo.end(), [](char &c)
                 { c = ::tolower(c); });
@@ -209,7 +133,15 @@ int valida_tipo(string tipo)
   }
 }
 
-void cadastrar_itens()
+/*============================================
+
+* Funções usadas para operacoes com estoque
+
+==============================================
+*/
+
+/*FUnção usada para cadastrar itens no estoque*/
+void Cadastrar_itens()
 {
 
   int numero_identificador, custo, unidade, escolha;
@@ -217,7 +149,7 @@ void cadastrar_itens()
   cout << "Identificador (valor inteiro): " << endl;
   cin >> numero_identificador;
   cout << endl;
-  while (valida_identificador(numero_identificador) == 1)
+  while (Valida_identificador(numero_identificador) == 1)
   {
     cout << "Id ja cadsatrado. Digite um novo (valor inteiro): " << endl;
     cin >> numero_identificador;
@@ -229,7 +161,7 @@ void cadastrar_itens()
   getline(cin, nome);
   cout << endl;
 
-  while (valida_nome(nome) == 1)
+  while (Valida_nome(nome) == 1)
   {
     cout << "Nome do item ja cadastrado (digite sem acentos ou ç)digite novamente: " << endl;
     cin.ignore();
@@ -270,11 +202,11 @@ void cadastrar_itens()
     item.set_Custo(custo);
     item.set_Nome(nome);
     fstream fout;
-    fout.open("teste.txt", ios::ate | ios::out | ios::in); // abre para escrita (ios::out)
+    fout.open("estoque.txt", ios::app); // abre para escrita (ios::out)
 
     fout << item.get_Numero_identificador()
          << " " << item.get_Tipo() << " " << item.get_Custo() << " " << unidade << " "
-         << replace_inv(item.get_Nome())
+         << Replace_inv(item.get_Nome())
          << " " << dano << endl;
     fout.close();
   }
@@ -290,11 +222,11 @@ void cadastrar_itens()
     item.set_Custo(custo);
     item.set_Nome(nome);
     fstream fout;
-    fout.open("teste.txt", ios::ate | ios::out | ios::in); // abre para escrita (ios::out)
+    fout.open("estoque.txt", ios::app); // abre para escrita (ios::out)
 
     fout << item.get_Numero_identificador()
          << " " << item.get_Tipo() << " " << item.get_Custo() << " " << unidade << " "
-         << replace_inv(item.get_Nome())
+         << Replace_inv(item.get_Nome())
          << " " << armadura << endl;
     fout.close();
   }
@@ -310,23 +242,24 @@ void cadastrar_itens()
     item.set_Custo(custo);
     item.set_Nome(nome);
     fstream fout;
-    fout.open("teste.txt", ios::ate | ios::out | ios::in); // abre para escrita (ios::out)
+    fout.open("estoque.txt", ios::app); // abre para escrita (ios::out)
 
     fout << item.get_Numero_identificador()
          << " " << item.get_Tipo() << " " << item.get_Custo() << " " << unidade << " "
-         << replace_inv(item.get_Nome())
+         << Replace_inv(item.get_Nome())
          << " " << qtd << endl;
     fout.close();
   }
 }
 
+/*Lista todos os itens do estoque*/
 void Lista_itens()
 {
 
   fstream fout;
   int id, custo, unidade, escolha, valor;
   string nome, tipo;
-  fout.open("teste.txt", ios::in); // abre para escrita (ios::out)
+  fout.open("estoque.txt", ios::in); // abre para escrita (ios::out)
 
   while (fout >> id >> escolha >> custo >> unidade >> nome >> valor)
   {
@@ -351,7 +284,7 @@ void Lista_itens()
 
     cout << "Valor em peças de ouro: " << custo << endl;
     cout << "Quantidade disponivel para venda: " << unidade << endl;
-    cout << "Nome do item: " << replace(nome) << endl;
+    cout << "Nome do item: " << Replace(nome) << endl;
     cout << endl;
   }
 
@@ -359,12 +292,13 @@ void Lista_itens()
   cout << endl;
 }
 
-void imprimi_itens(Armadura_Jogo vtr, Armanentos_Jogo vta, Consumiveis_Jogo vtc, int opcao, int num)
+/*Registra as mudanças no estoque seja exclusão ou modificação das unidades de um item*/
+void Registra_mudanca(Armadura_Jogo vtr, Armanentos_Jogo vta, Consumiveis_Jogo vtc, int opcao, int num)
 {
   fstream fout;
   int i;
   int maior = (vta.num > vtr.num) ? (vta.num > vtc.num ? vta.num : vtc.num) : (vtr.num > vtc.num ? vtr.num : vtc.num);
-  fout.open("teste.txt", ios::out);
+  fout.open("estoque.txt", ios::out);
 
   if (opcao == 3)
   {
@@ -476,6 +410,7 @@ void imprimi_itens(Armadura_Jogo vtr, Armanentos_Jogo vta, Consumiveis_Jogo vtc,
   fout.close();
 }
 
+/*Função que exporta o estoque*/
 void Export_estoque(Armadura_Jogo vtr, Armanentos_Jogo vta, Consumiveis_Jogo vtc)
 {
   fstream fout;
@@ -521,6 +456,7 @@ void Export_estoque(Armadura_Jogo vtr, Armanentos_Jogo vta, Consumiveis_Jogo vtc
   fout.close();
 }
 
+/*Função que e usada para modificar usadas*/
 void Modifica_unidades(int selecionado)
 {
 
@@ -531,7 +467,7 @@ void Modifica_unidades(int selecionado)
 
   int id, custo, unidade, escolha, valor, maior, num;
   string nome, tipo;
-  fout.open("teste.txt", ios::in); // abre para escrita (ios::out)
+  fout.open("estoque.txt", ios::in); // abre para escrita (ios::out)
 
   while (fout >> id >> escolha >> custo >> unidade >> nome >> valor)
   {
@@ -572,9 +508,9 @@ void Modifica_unidades(int selecionado)
   {
     cout << "Digite o identificador do item" << endl;
     cin >> num;
-    if (valida_identificador(num) == 1)
+    if (Valida_identificador(num) == 1)
     {
-      imprimi_itens(vtr, vta, vtc, selecionado, num);
+      Registra_mudanca(vtr, vta, vtc, selecionado, num);
       cout << "Item modificado com sucesso" << endl;
       cout << endl;
     }
@@ -589,9 +525,9 @@ void Modifica_unidades(int selecionado)
   {
     cout << "Digite o identificador do item" << endl;
     cin >> num;
-    if (valida_identificador(num) == 1)
+    if (Valida_identificador(num) == 1)
     {
-      imprimi_itens(vtr, vta, vtc, selecionado, num);
+      Registra_mudanca(vtr, vta, vtc, selecionado, num);
       cout << "Item excluido com sucesso" << endl;
       cout << endl;
     }
@@ -609,6 +545,7 @@ void Modifica_unidades(int selecionado)
   }
 }
 
+/* Menu estoque */
 void menu_estoque()
 {
 
@@ -626,7 +563,7 @@ void menu_estoque()
     {
     case 1:
       system("clear||cls");
-      cadastrar_itens();
+      Cadastrar_itens();
       break;
     case 2:
       system("clear||cls");
@@ -665,37 +602,316 @@ void menu_estoque()
   system("clear||cls");
 }
 
-void retira_unidade()
-{
-}
+/* ===================
 
-int primo(int num)
-{
-  int aux, div = 0;
+    * Funções usadas para operacoes com vendas
 
-  if (div == 0)
-    return 0;
-  for (aux = 2; aux <= num; aux++)
-    if (num % aux == 0)
-      div++;
+   ====================*/
 
-  return div;
-}
-void registra_compra()
+/*Busca a quantidade de unidades de um item */
+
+Itens busca_unidade(int idi)
 {
   fstream fout;
-  fout.open("export/estoque.txt", ios::out);
+  Itens aux;
+  int id, d, custo, unidade, valor;
+  string linha;
+  fout.open("estoque.txt", ios::in); // abre para escrita (ios::out)
+
+  while (fout >> id >> d >> custo >> unidade >> linha >> valor)
+  {
+    if (idi == id)
+    {
+      fout.close();
+      aux.set_unidade(unidade);
+      aux.set_Custo(custo);
+      aux.set_Nome(Replace(linha));
+      return aux;
+    }
+  }
+
+  fout.close();
+  return aux;
+}
+
+/*retira a unidade anterior e adicona a nova unidade de um item modificada */
+void retira_unidade(int idi, int unidade_nova)
+{
+  fstream fout;
+  Armadura_Jogo vtr;
+  Armanentos_Jogo vta;
+  Consumiveis_Jogo vtc;
+
+  int id, custo, unidade, escolha, valor, maior, num, i;
+  string nome, tipo;
+  maior = (vta.num > vtr.num) ? (vta.num > vtc.num ? vta.num : vtc.num) : (vtr.num > vtc.num ? vtr.num : vtc.num);
+  fout.open("estoque.txt", ios::in); // abre para escrita (ios::out)
+
+  while (fout >> id >> escolha >> custo >> unidade >> nome >> valor)
+  {
+    if (escolha == 1)
+    {
+      vta.itens[vta.num].set_Numero_identificador(id);
+      vta.itens[vta.num].set_Tipo(escolha);
+      vta.itens[vta.num].set_Custo(custo);
+      vta.itens[vta.num].set_Nome(nome);
+      vta.itens[vta.num].set_unidade(unidade);
+      vta.itens[vta.num].set_dano(valor);
+      vta.num = vta.num + 1;
+    }
+    else if (escolha == 2)
+    {
+      vtr.itens[vtr.num].set_Numero_identificador(id);
+      vtr.itens[vtr.num].set_Tipo(escolha);
+      vtr.itens[vtr.num].set_Custo(custo);
+      vtr.itens[vtr.num].set_Nome(nome);
+      vtr.itens[vtr.num].set_unidade(unidade);
+      vtr.itens[vtr.num].set_Durabilidade(valor);
+      vtr.num = vtr.num + 1;
+    }
+    else
+    {
+      vtc.itens[vtc.num].set_Numero_identificador(id);
+      vtc.itens[vtc.num].set_Tipo(escolha);
+      vtc.itens[vtc.num].set_Custo(custo);
+      vtc.itens[vtc.num].set_Nome(nome);
+      vtc.itens[vtc.num].set_unidade(unidade);
+      vtc.itens[vtc.num].set_carga(valor);
+      vtc.num = vtc.num + 1;
+    }
+  }
+  fout.close();
+
+  fout.open("estoque.txt", ios::out);
+  maior = (vta.num > vtr.num) ? (vta.num > vtc.num ? vta.num : vtc.num) : (vtr.num > vtc.num ? vtr.num : vtc.num);
+  for (i = 0; i < maior; i++)
+  {
+    if (vta.num > i)
+    {
+      if (idi == vta.itens[i].get_Numero_identificador())
+      {
+        fout << vta.itens[i].get_Numero_identificador()
+             << " " << vta.itens[i].get_Tipo() << " " << vta.itens[i].get_Custo() << " " << unidade_nova << " "
+             << vta.itens[i].get_Nome()
+             << " " << vta.itens[i].get_dano() << endl;
+      }
+      else
+      {
+        fout << vta.itens[i].get_Numero_identificador()
+             << " " << vta.itens[i].get_Tipo() << " " << vta.itens[i].get_Custo() << " " << vta.itens[i].get_unidade() << " "
+             << vta.itens[i].get_Nome()
+             << " " << vta.itens[i].get_dano() << endl;
+      }
+    }
+
+    if (vtr.num > i)
+    {
+
+      if (idi == vtr.itens[i].get_Numero_identificador())
+      {
+        fout << vtr.itens[i].get_Numero_identificador()
+             << " " << vtr.itens[i].get_Tipo() << " " << vtr.itens[i].get_Custo() << " " << unidade_nova << " "
+             << vtr.itens[i].get_Nome()
+             << " " << vtr.itens[i].get_Durabilidade() << endl;
+      }
+      else
+      {
+        fout << vtr.itens[i].get_Numero_identificador()
+             << " " << vtr.itens[i].get_Tipo() << " " << vtr.itens[i].get_Custo() << " " << vtr.itens[i].get_unidade() << " "
+             << vtr.itens[i].get_Nome()
+             << " " << vtr.itens[i].get_Durabilidade() << endl;
+      }
+    }
+
+    if (vtc.num > i)
+    {
+
+      if (idi == vtc.itens[i].get_Numero_identificador())
+      {
+        fout << vtc.itens[i].get_Numero_identificador()
+             << " " << vtc.itens[i].get_Tipo() << " " << vtc.itens[i].get_Custo() << " " << unidade_nova << " "
+             << vtc.itens[i].get_Nome()
+             << " " << vtc.itens[i].get_carga() << endl;
+      }
+      else
+      {
+        fout << vtc.itens[i].get_Numero_identificador()
+             << " " << vtc.itens[i].get_Tipo() << " " << vtc.itens[i].get_Custo() << " " << vtc.itens[i].get_unidade() << " "
+             << vtc.itens[i].get_Nome()
+             << " " << vtc.itens[i].get_carga() << endl;
+      }
+    }
+  }
+  fout.close();
+}
+
+/*Calcula os numeros primos */
+int primo(int num)
+{
+  int x, numDiv = 0,
+         contPrimo = 0,
+         repetidor;
+  for (repetidor = 2; repetidor <= num; repetidor++)
+  {
+    numDiv = 0;
+    for (x = 1; x <= repetidor; x++)
+    {
+      if (repetidor % x == 0)
+      {
+        numDiv++;
+      }
+    }
+    if (numDiv == 2)
+      contPrimo++;
+  }
+  return contPrimo;
+}
+
+/*Gera numeros aleatorios */
+int numeroAleatorio(int menor, int maior)
+{
+  return rand() % (maior - menor + 1) + menor;
+}
+
+/*Imprimi vendas */
+void Imprime_vendas()
+{
+
+  int idv, idi, qtd;
+  string nome;
+  float totalc, totald;
+  fstream fout;
+  fout.open("Logvendas.txt", ios::in);
+  if (!fout.is_open())
+  {
+    cout << "Nao existe vendas registradas";
+    return;
+  }
+
+  while (fout >> idv >> idi >> nome >> qtd >> totalc >> totald)
+  {
+    cout << "Id da venda: " << idv << endl;
+    cout << "Id do item: " << idi << endl;
+    cout << "Nome do item: " << Replace_inv(nome) << endl;
+    cout << "Quantidades de itens vendidos: " << qtd << endl;
+    cout << "Total sem desconto: " << totalc << endl;
+    cout << "Total com desconto: " << totald << endl;
+    cout << endl;
+  }
+  fout.close();
+}
+
+/*Gera export*/
+void Gravar_export(int idv, int idi, string nome, int qtd, float totalc, float totald)
+{
+
+  fstream fout;
+  fout.open("export/Logvendas.txt", ios::out);
+  if (!fout.is_open())
+  {
+    fout.open("export/Logvendas.txt");
+  }
+
+  fout << "Id da venda: " << idv << endl;
+  fout << "Id do item: " << idi << endl;
+  fout << "Nome do item: " << Replace_inv(nome) << endl;
+  fout << "Quantidades de itens vendidos: " << qtd << endl;
+  fout << "Total sem desconto: " << totalc << endl;
+  fout << "Total com desconto: " << totald << endl;
+  fout << endl;
 
   fout.close();
 }
 
+/*chama a funcao para export*/
+void Exportar_vendas()
+{
+
+  int idv, idi, qtd;
+  string nome;
+  float totalc, totald;
+  fstream fout;
+  fstream fout2;
+  fout2.open("export/Logvendas.txt", ios::out);
+  fout.open("Logvendas.txt", ios::in);
+  if (!fout.is_open())
+  {
+    cout << "Nao existe vendas registradas";
+    return;
+  }
+
+  while (fout >> idv >> idi >> nome >> qtd >> totalc >> totald)
+  {
+
+    if (!fout2.is_open())
+    {
+      fout2.open("export/Logvendas.txt");
+    }
+
+    fout2 << "Id da venda: " << idv << endl;
+    fout2 << "Id do item: " << idi << endl;
+    fout2 << "Nome do item: " << Replace_inv(nome) << endl;
+    fout2 << "Quantidades de itens vendidos: " << qtd << endl;
+    fout2 << "Total sem desconto: " << totalc << endl;
+    fout2 << "Total com desconto: " << totald << endl;
+    fout2 << endl;
+  }
+  fout.close();
+  fout2.close();
+  cout << "Arquivo gerado com sucesso verique a pasta export" << endl;
+  cout << endl;
+}
+
+/*Registra uma venda*/
+void Regista_venda(int id, string nome, int qtd, float totalc, float totald)
+{
+  fstream fout;
+  fout.open("Logvendas.txt", ios::app);
+  srand((unsigned)time(0));
+  if (!fout.is_open())
+  {
+    fout.open("Logvendas.txt");
+  }
+
+  fout << numeroAleatorio(1000, 4000) << " " << id << " " << Replace_inv(nome) << " " << qtd << " " << totalc << " " << totald << endl;
+
+  fout.close();
+}
+
+/*chama a funcao para registrar venda*/
+void registra_compra(int num, int id)
+{
+
+  fstream fout;
+  float desconto, total;
+  Itens aux = busca_unidade(id);
+
+  if (aux.get_unidade() > 0)
+  {
+    cout << endl;
+    desconto = primo(aux.get_unidade()) * 0.02;
+    total = num * (aux.get_Custo() - (aux.get_Custo() * desconto));
+
+    cout << "Quantidade de unidades compradas: " << num << endl;
+    cout << "Custo da unidade em peças de ouro: " << aux.get_Custo() << endl;
+    cout << "Valor sem custo: " << aux.get_Custo() * num << endl;
+    cout << "Desconto em peças de ouro: " << desconto << endl;
+    cout << "Valor total com Desconto: " << total << endl;
+    retira_unidade(id, aux.get_unidade() - num);
+    Regista_venda(id, aux.get_Nome(), num, aux.get_Custo() * num, total);
+  }
+
+  cout << endl;
+}
+
+/*verifica se o valor digitado para compra da unidade e menor do que esta diposnivel*/
 bool valida_unidade(int num, int unidaded)
 {
   fstream fout;
   int id, d, custo, unidade, valor;
   string linha;
   string nome;
-  fout.open("teste.txt", ios::in); // abre para escrita (ios::out)
+  fout.open("estoque.txt", ios::in); // abre para escrita (ios::out)
 
   while (fout >> id >> d >> custo >> unidade >> linha >> valor)
   {
@@ -711,19 +927,21 @@ bool valida_unidade(int num, int unidaded)
   return false;
 }
 
+/*chama todas as funcoes anteriores relacionada a venda*/
 void Venda_item()
 {
   int num;
   cout << "Digite o identificador do item" << endl;
   cin >> num;
 
-  if (valida_identificador(num) == 1)
+  if (Valida_identificador(num) == 1)
   {
     int unidade;
     cout << "Digite a quantidade de itens para compra: " << endl;
     cin >> unidade;
     if (valida_unidade(num, unidade) == 1)
     {
+      registra_compra(unidade, num);
     }
     else
     {
@@ -736,13 +954,14 @@ void Venda_item()
   }
 }
 
+/*Menu estoque*/
 void menu_vendas()
 {
   int opcao, id;
   cout << "Venda: " << endl;
   cout << "1 - Vender um item " << endl;
-  cout << "2 - Remover um item" << endl;
-  cout << "3 - Adicionar unidades" << endl;
+  cout << "2 - Mostrar logs de venda" << endl;
+  cout << "3 - Exportar log de venda" << endl;
   cin >> opcao;
   while (opcao == 1 || opcao == 2 || opcao == 3)
   {
@@ -754,13 +973,11 @@ void menu_vendas()
       break;
     case 2:
       system("clear||cls");
-      Modifica_unidades(2);
+      Imprime_vendas();
       break;
     case 3:
       system("clear||cls");
-      cout << "Digite o identificador do item" << endl;
-      cin >> id;
-      Modifica_unidades(3);
+      Exportar_vendas();
 
       break;
     default:
@@ -770,14 +987,14 @@ void menu_vendas()
 
     cout << "Venda: " << endl;
     cout << "1 - Vender um item " << endl;
-    cout << "2 - Remover um item" << endl;
-    cout << "3 - Adicionar unidades" << endl;
+    cout << "2 - Mostrar logs de venda" << endl;
+    cout << "3 - Exportar log de venda" << endl;
     cin >> opcao;
   }
   system("clear||cls");
 }
-/*FUncao mains */
 
+/*Função Main */
 int main()
 {
 

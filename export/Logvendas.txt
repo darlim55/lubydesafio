@@ -1,0 +1,21 @@
+Id da venda: 1871
+Id do item: 20333
+Nome do item: Armadura de Warmog
+Quantidades de itens vendidos: 1
+Total sem desconto: 10
+Total com desconto: 9.2
+
+Id da venda: 3788
+Id do item: 20015
+Nome do item: Crepusculo de Drakthar
+Quantidades de itens vendidos: 1
+Total sem desconto: 4
+Total com desconto: 3.68
+
+Id da venda: 1257
+Id do item: 20015
+Nome do item: Crepusculo de Drakthar
+Quantidades de itens vendidos: 3
+Total sem desconto: 12
+Total com desconto: 11.04
+

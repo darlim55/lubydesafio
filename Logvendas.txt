@@ -1,0 +1,3 @@
+1871 20333 Armadura_de_Warmog 1 10 9.2
+3788 20015 Crepusculo_de_Drakthar 1 4 3.68
+1257 20015 Crepusculo_de_Drakthar 3 12 11.04
