@@ -10,7 +10,7 @@
 20455 1 8 2 Gume_do_Infinito 20
 20999 2 10 2 Couraca_do_Defunto 100
 20666 1 8 2 Lâmina_Fantasma_de_Youmuu 15
-32312 2 15 14 martelo_thor 1
+32312 2 15 12 martelo_thor 1
 20987 1 8 2 Limite_da_Razao 20
 20755 1 8 0 Dancarina_Fantasma 20
 20855 1 10 2 Forca_da_Trindade 30

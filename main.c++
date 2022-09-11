@@ -148,11 +148,6 @@ void Cadastrar_itens()
   string nome, tipo;
   cout << "Identificador (valor inteiro): " << endl;
   cin >> numero_identificador;
-  if (numero_identificador == (int)numero_identificador)
-    cout << "inteiro" << endl;
-  else
-    cout << "nao e inteiro" << endl;
-  cout << endl;
   while (Valida_identificador(numero_identificador) == 1)
   {
     cout << "Id ja cadsatrado. Digite um novo (valor inteiro): " << endl;
@@ -510,7 +505,7 @@ void Modifica_unidades(int selecionado)
 
   if (selecionado == 3)
   {
-    cout << "Digite o identificador do item" << endl;
+    cout << "Digite o identificador do item (Somente inteiro)" << endl;
     cin >> num;
     if (Valida_identificador(num) == 1)
     {
@@ -527,7 +522,7 @@ void Modifica_unidades(int selecionado)
 
   if (selecionado == 2)
   {
-    cout << "Digite o identificador do item" << endl;
+    cout << "Digite o identificador do item (Somente inteiro)" << endl;
     cin >> num;
     if (Valida_identificador(num) == 1)
     {
@@ -554,7 +549,7 @@ void menu_estoque()
 {
 
   int opcao, id;
-  cout << "Estoque: " << endl;
+  cout << "Estoque (Somente inteiros): " << endl;
   cout << "1 - Cadastro de Itens" << endl;
   cout << "2 - Remover um item" << endl;
   cout << "3 - Adicionar unidades" << endl;
@@ -576,8 +571,6 @@ void menu_estoque()
       break;
     case 3:
       system("clear||cls");
-      cout << "Digite o identificador do item" << endl;
-      cin >> id;
       Modifica_unidades(3);
 
       break;
@@ -937,26 +930,29 @@ bool valida_unidade(int num, int unidaded)
 void Venda_item()
 {
   int num;
-  cout << "Digite o identificador do item" << endl;
+  cout << "Digite o identificador do item (Somente inteiro)" << endl;
   cin >> num;
 
   if (Valida_identificador(num) == 1)
   {
     int unidade;
-    cout << "Digite a quantidade de itens para compra: " << endl;
+    cout << "Digite a quantidade de itens para compra (Somente inteiro): " << endl;
     cin >> unidade;
     if (valida_unidade(num, unidade) == 1)
     {
       registra_compra(unidade, num);
+      cout << "Compara registrada com sucesso" << endl;
     }
     else
     {
-      cout << "O item nao possui unidades disponiveis" << endl;
+      cout << "O item a quantidade de unidades solicitadas " << endl;
+      cout << endl;
     }
   }
   else
   {
     cout << "Identificador invalido" << endl;
+    cout << endl;
   }
 }
 
