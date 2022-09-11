@@ -38,4 +38,4 @@ Apos gerar o executável digite no cmd:
 
 **Obs: Lembrando que precisa-se instalar as bibliotecas do c++ no vscode e linux e estar dentro da pasta do projeto para os comandos funcionarem.**
 
-**Respeitar os pedidos para digitar os valores inteiros, pois o tempo não foi suficiente para validar as entradas ao digitar uma string. **
+**Respeitar os pedidos para digitar os valores inteiros, pois o tempo não foi suficiente para validar as entradas ao digitar uma string.**
