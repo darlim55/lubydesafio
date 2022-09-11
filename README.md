@@ -36,4 +36,4 @@ Digite o seguinte comando no cmd para gerar o executável do codigo:
 Apos gerar o executável digite no cmd:
 > ./main
 
-obs: Lembrando que precisa ter instalado as bibliotecas do c++ no vscode e linux e estar dentro da pastaa do projeto para funcionar.
+**Obs: Lembrando que precisa-se instalar as bibliotecas do c++ no vscode e linux e estar dentro da pasta do projeto para os comandos funcionarem.**
