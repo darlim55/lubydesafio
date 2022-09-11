@@ -25,3 +25,15 @@ Porém cada um dos tipos possui uma característica específica:
 
 **Consumíveis:**
 - Usos
+
+## Rodar loja
+
+Os comando a baixo servem para linux e vscode.
+
+Digite o seguinte comando no cmd para gerar o executável do codigo:
+> g++ -o main main.c++ 
+
+Apos gerar o executável digite no cmd:
+> ./main
+
+obs: Lembrando que precisa ter instalado as bibliotecas do c++ no vscode e linux e estar dentro da pastaa do projeto para funcionar.
