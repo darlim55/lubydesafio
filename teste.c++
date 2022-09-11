@@ -36,8 +36,8 @@ string Replace_inv(string nome)
 {
   for (int i = 0; i < nome.length(); i++)
   {
-    if (nome[i] == '_')
-      nome[i] = ' ';
+    if (nome[i] == ' ')
+      nome[i] = '_';
   }
 
   return nome;
@@ -798,7 +798,7 @@ void Imprime_vendas()
   {
     cout << "Id da venda: " << idv << endl;
     cout << "Id do item: " << idi << endl;
-    cout << "Nome do item: " << Replace_inv(nome) << endl;
+    cout << "Nome do item: " << Replace(nome) << endl;
     cout << "Quantidades de itens vendidos: " << qtd << endl;
     cout << "Total sem desconto: " << totalc << endl;
     cout << "Total com desconto: " << totald << endl;
