@@ -148,6 +148,10 @@ void Cadastrar_itens()
   string nome, tipo;
   cout << "Identificador (valor inteiro): " << endl;
   cin >> numero_identificador;
+  if (numero_identificador == (int)numero_identificador)
+    cout << "inteiro" << endl;
+  else
+    cout << "nao e inteiro" << endl;
   cout << endl;
   while (Valida_identificador(numero_identificador) == 1)
   {
@@ -556,6 +560,7 @@ void menu_estoque()
   cout << "3 - Adicionar unidades" << endl;
   cout << "4 - Listar Itens" << endl;
   cout << "5 - Exportar estoque" << endl;
+  cout << "Digite outro valor inteiro para voltar ao menu anterior" << endl;
   cin >> opcao;
   while (opcao == 1 || opcao == 2 || opcao == 3 || opcao == 4 || opcao == 5)
   {
@@ -597,6 +602,7 @@ void menu_estoque()
     cout << "3 - Adicionar unidades" << endl;
     cout << "4 - Listar Itens" << endl;
     cout << "5 - Exportar estoque" << endl;
+    cout << "Digite outro valor inteiro para voltar ao menu anterior" << endl;
     cin >> opcao;
   }
   system("clear||cls");
@@ -962,6 +968,7 @@ void menu_vendas()
   cout << "1 - Vender um item " << endl;
   cout << "2 - Mostrar logs de venda" << endl;
   cout << "3 - Exportar log de venda" << endl;
+  cout << "Digite outro valor inteiro para voltar ao menu anterior" << endl;
   cin >> opcao;
   while (opcao == 1 || opcao == 2 || opcao == 3)
   {
@@ -989,6 +996,7 @@ void menu_vendas()
     cout << "1 - Vender um item " << endl;
     cout << "2 - Mostrar logs de venda" << endl;
     cout << "3 - Exportar log de venda" << endl;
+    cout << "Digite outro valor inteiro para voltar ao menu anterior" << endl;
     cin >> opcao;
   }
   system("clear||cls");
@@ -1003,6 +1011,7 @@ int main()
   cout << "Selecione uma Opção" << endl;
   cout << "1 - Estoque" << endl;
   cout << "2 - Venda" << endl;
+  cout << "Digite outro valor inteiro para sair" << endl;
   cin >> opcao;
   while (opcao == 1 || opcao == 2)
   {
@@ -1017,13 +1026,14 @@ int main()
       menu_vendas();
       break;
     default:
-      cout << "1 - Estoque" << endl;
+      cout << "Obrigado por utilizar nosso sistema" << endl;
       ;
     }
 
     cout << "Selecione uma Opção" << endl;
     cout << "1 - Estoque" << endl;
     cout << "2 - Venda" << endl;
+    cout << "Digite outro valor inteiro para sair" << endl;
     cin >> opcao;
   }
 }

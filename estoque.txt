@@ -17,5 +17,3 @@
 20111 1 10 2 Criafendas 30
 20155 1 20 20 Jorge_Darlim 15
 312321 1 20 20 espada_do_rei 20
-5656 2 20 12 capa solar 1
-2222 1 20 20 dsfsa 12
